@@ -1,23 +1,26 @@
-let dataset = [10, 20, 30, 40];
+let dados = [205, 78, 251, 114, 299, 45, 187];
+let svg = d3.select('#grafico');
+let largura = parseInt(svg.style('width'));
+let altura = parseInt(svg.style('height'));
 
-// 1. Seleciona todos os 'divs' que têm a classe 'barra' dentro do '#grafico'.
-let grafico = d3.select('#grafico').selectAll('div.barra');
+// Escala para o eixo X (largura das barras)
+// O domínio vai de 0 até o valor máximo nos dados
+// O alcance vai de 0 até a largura do SVG
+let fnx = d3.scaleLinear().domain([0, d3.max(dados)]).range([0, largura]);
 
-// 2. Vincula os dados e gera as três seleções: 'update', 'enter' e 'exit'.
-let graficoupdate = grafico.data(dataset);
+// Escala para o eixo Y (posição e altura das barras)
+// O domínio vai de 0 até o número de dados
+// O alcance vai de 0 até a altura do SVG
+let fny = d3.scaleBand()
+    .domain(d3.range(dados.length))
+    .range([0, altura])
+    .padding(0.1); // Adiciona um pequeno espaçamento entre as barras
 
-// 3. SELEÇÃO DE ENTER: Adiciona novos 'divs' para os dados que não têm um elemento correspondente.
-//    (Os dados 30 e 40, neste caso)
-graficoupdate.enter().append('div')
-    .attr('class', 'barra') // Adiciona a classe 'barra' para aplicar os estilos do CSS
-    .text((d) => d)
-    .style('width', (d) => d * 10 + 'px');
-
-// 4. SELEÇÃO DE UPDATE: Atualiza os 'divs' que já existem na página.
-//    (Os dados 10 e 20)
-graficoupdate
-    .text((d) => d)
-    .style('width', (d) => d * 10 + 'px');
-
-// 5. SELEÇÃO DE EXIT: Remove os 'divs' que não têm mais dados correspondentes.
-graficoupdate.exit().remove();
+svg.selectAll('.barra')
+    .data(dados)
+    .join('rect')
+    .attr('class', 'barra')
+    .attr('x', 0)
+    .attr('y', (d, i) => fny(i))
+    .attr('width', d => fnx(d))
+    .attr('height', fny.bandwidth());

@@ -1,6 +1,9 @@
+#grafico{
+    width: 600px;
+    height: 400px;
+    border: thin solid black;
+}
 .barra{
-    background-color: lightblue;
-    margin-bottom: 5px;
-    padding: 5px;
-    text-align: right;
+    fill: lightblue;
+    stroke: black;
 }
