@@ -3,10 +3,10 @@
     height: 400px;
     border: thin solid black;
 }
-.barra{
+.coluna{
     fill: lightblue;
     stroke: black;
 }
 .rotulo{
-    text-anchor: end;
+    text-anchor: middle;
 }
