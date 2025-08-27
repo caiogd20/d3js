@@ -7,3 +7,6 @@
     fill: lightblue;
     stroke: black;
 }
+.rotulo{
+    text-anchor: end;
+}

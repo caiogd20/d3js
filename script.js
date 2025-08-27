@@ -24,3 +24,14 @@ svg.selectAll('.barra')
     .attr('y', (d, i) => fny(i))
     .attr('width', d => fnx(d))
     .attr('height', fny.bandwidth());
+svg.selectAll('.rotulo')
+    .data(dados)
+    .enter()
+    .append('text')
+    .attr('class', 'rotulo')
+    .text((d)=>d)
+    .attr('x', (d)=>fnx(d))
+    .attr('dx', -5)
+    .attr('y', (d,i) => fny(i))
+    .attr('dy',(d,i) => fny(1)*0.5 );
+    
