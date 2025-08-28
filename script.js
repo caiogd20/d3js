@@ -10,14 +10,23 @@ let dados = [
 let svg = d3.select('#grafico');
 let largura = parseInt(svg.style('width'));
 let altura = parseInt(svg.style('height'));
+let tituloX = 'Tipo de pastéis'
+let tituloY = 'Quantidade de vendas'
 
-let larguraPlotagem = largura-40
-let alturaPlotagem = altura-40
+let margem ={
+    e: 70,
+    d: 20,
+    s: 40,
+    i: 100
+}
+
+let larguraPlotagem = largura - margem.e - margem.d
+let alturaPlotagem = altura - margem.s - margem.i
 
 let plotagem = svg.append('g')
     .attr('width',larguraPlotagem)
     .attr('height',alturaPlotagem)
-    .attr('transform', 'translate(20, 20)');
+    .attr('transform', 'translate('+margem.e+', '+margem.s+')');
 
 
 // Escala para o eixo X (largura das barras)
@@ -38,6 +47,38 @@ let fny = d3.scaleLinear()
 let fnCores =d3.scaleLinear()
     .domain([0,d3.max(dados.map(d=>d.valor))])
     .range(['#edf8e9','#005a32'])
+
+let eixoX = d3.axisBottom(fnx)
+plotagem.append('g')
+    .attr('transform', 'translate(0,'+alturaPlotagem+')')
+    .attr('id','eixoX')
+    .call(eixoX);
+
+let eixoy = d3.axisLeft(fny)
+plotagem.append('g')
+    .attr('id','eixoY')
+    .call(eixoy);
+
+let grade = d3.axisRight(fny)
+    .tickSize(larguraPlotagem)
+    .tickFormat('');
+plotagem.append('g')
+    .attr('id','grade')
+    .call(grade);
+
+svg.append('text')
+    .attr('x',0)
+    .attr('y',0)
+    .style('text-anchor', 'middle')
+    .attr('transform', 'translate(30,'+(margem.s+alturaPlotagem/2)+') rotate(-90)')
+    .text(tituloY);
+
+svg.append('text')
+    .attr('x',margem.e)
+    .attr('y',margem.s+alturaPlotagem)
+    .style('text-anchor', 'middle')
+    .attr('transform', 'translate('+larguraPlotagem/2+',80)')
+    .text(tituloX);
 
 plotagem.selectAll('.coluna')
     .data(dados)
